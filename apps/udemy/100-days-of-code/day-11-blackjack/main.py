@@ -21,15 +21,15 @@ def calculate_score(hand):
 def check_winner(user_score, dealer_score):
     """Compare user score and dealer score to check winner."""
     if user_score > 21:
-        return "You went over. You lose😭"
+        return "You went over. You lose😭\n"
     elif dealer_score > 21:
-        return "Dealer went over. You win!🥳"
+        return "Dealer went over. You win!🥳\n"
     elif user_score == dealer_score:
-        return "Draw😲"
+        return "Draw😲\n"
     elif user_score > dealer_score:
-        return "You win!🥳"
+        return "You win!🥳\n"
     else:
-        return "You lose😭"
+        return "You lose😭\n"
 
 def play_game():
     print(logo)
@@ -62,9 +62,11 @@ def play_game():
     print(f"Dealer's final hand: {dealer_cards}, final score {dealer_score}")
     print(check_winner(user_score, dealer_score))
 
+def run():
+    while input("Do you want to play a game of Blackjack? Type 'y' or 'n': ") == "y":
+        print("\n" * 20)
+        play_game()
 
-while input("Do you want to play a game of Blackjack? Type 'y' or 'n': ") == "y":
-    print("\n" * 20)
-    play_game()
+    print("See you next time!")
 
-print("See you next time!")
+run()
