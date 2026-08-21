@@ -13,23 +13,23 @@ def draw_card():
 def calculate_score(hand):
     """Calculate the score of a hand and return the score.
     When user's score went over 21 and has 11, replace 11 to 1."""
-    if sum(hand) > 21 and 11 in hand:
-        hand[hand.index(11)] = 1
+    while sum(hand) > 21 and 11 in hand:
+          hand[hand.index(11)] = 1
 
     return sum(hand)
 
 def check_winner(user_score, dealer_score):
     """Compare user score and dealer score to check winner."""
     if user_score > 21:
-        print("You went over. You lose😭")
+        return "You went over. You lose😭"
     elif dealer_score > 21:
-        print("Dealer went over. You win!🥳")
+        return "Dealer went over. You win!🥳"
     elif user_score == dealer_score:
-        print("Draw😲")
+        return "Draw😲"
     elif user_score > dealer_score:
-        print("You win!🥳")
+        return "You win!🥳"
     else:
-        print("You lose😭")
+        return "You lose😭"
 
 def play_game():
     print(logo)
@@ -41,8 +41,6 @@ def play_game():
 
     is_game_over = False
     while not is_game_over:
-        user_score = calculate_score(user_cards)
-
         print(f"Your cards: {user_cards}, current score: {user_score}")
         print(f"Dealer's first card: {dealer_cards[0]}")
         draw_another = input("Type 'y' to get another card, type 'n' to pass: ")
@@ -50,21 +48,23 @@ def play_game():
         if draw_another == 'y':
             user_cards.append(draw_card())
             user_score = calculate_score(user_cards)
-
             if user_score > 21:
                 is_game_over = True
         else:
             is_game_over = True
 
-    while dealer_score < 17:
+    if user_score <= 21:
+        while dealer_score < 17:
             dealer_cards.append(draw_card())
             dealer_score = calculate_score(dealer_cards)
 
     print(f"Your final hand: {user_cards}, final score {user_score}")
     print(f"Dealer's final hand: {dealer_cards}, final score {dealer_score}")
-    check_winner(user_score, dealer_score)
+    print(check_winner(user_score, dealer_score))
 
 
 while input("Do you want to play a game of Blackjack? Type 'y' or 'n': ") == "y":
     print("\n" * 20)
     play_game()
+
+print("See you next time!")
