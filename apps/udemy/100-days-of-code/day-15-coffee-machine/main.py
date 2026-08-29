@@ -1,8 +1,8 @@
 COIN_AMOUNT = {
-    "quarters" : 0.25,
-    "dimes" : 0.10,
-    "nickles" : 0.05,
-    "pennies" : 0.01
+    "quarters": 0.25,
+    "dimes": 0.10,
+    "nickels": 0.05,
+    "pennies": 0.01
 }
 
 MENU = {
@@ -31,92 +31,91 @@ MENU = {
     }
 }
 
-resources = {
-    "water": 300,
-    "milk": 200,
-    "coffee": 100,
-}
 
-
-def make(drink, m_resources):
-    ingredients = MENU[drink]["ingredients"]
-
+def make_drink(d_ingredients: dict[str, int], m_resources: dict[str, int]):
     new_resources = {}
-    for name, amount in ingredients.items():
-        new_resources[name] = m_resources[name] - amount
+    for name, d_amount in d_ingredients.items():
+        new_resources[name] = m_resources[name] - d_amount
 
     return new_resources
 
-def report(m_resources):
-    for drink, amount in resources.items():
-        print(f"{drink.title()}: {amount}")
 
-def off():
-    print("Off")
+def report_machine_resources(m_resources: dict[str, int], m_money):
+    for drink, r_amount in m_resources.items():
+        print(f"{drink.title()}: {r_amount}")
+    print(f"Money: ${m_money:.2f}")
 
-operate_machine = {
-    "make": make,
-    "report": report,
-    "off": off,
-}
 
-# def operate_machine(operation):
-#
-#     if operation == "report":
-#         water = resources["water"]
-#         milk = resources["milk"]
-#         coffee = resources["coffee"]
-#         print(f"Water: {water}\nMilk: {milk}\nCoffee: {coffee}")
-#     elif operation == "make":
-#
-#     elif operation == "off":
-#         print("Off")
-
-def check_resources(machine_resources, drink):
-    ingredients = MENU[drink]["ingredients"]
-    for item in machine_resources:
-        if resources[item] < ingredients[item]:
+def check_resources(d_ingredients: dict[str, int], m_resources: dict[str, int]):
+    for item in d_ingredients:
+        if m_resources[item] < d_ingredients[item]:
+            print(f"Sorry there is not enough {item}.")
             return False
+
     return True
 
 
-# TODO 5 calculate coins
-def calculate_coins(drink_cost, c_quarters, c_dimes, c_nickles, c_pennies):
-    amount = 0
-    amount += COIN_AMOUNT["quarters"] * c_quarters
-    amount += COIN_AMOUNT["dimes"] * c_dimes
-    amount += COIN_AMOUNT["nickles"] * c_nickles
-    amount += COIN_AMOUNT["pennies"] * c_pennies
-    return order_cost < amount
-
-# TODO 1 Prompt user by asking “What would you like?
-order = input("What would you like? (espresso/latte/cappuccino): ")
-print("Please insert coins.")
-
-# TODO 2 Turn off the Coffee Machine by entering “off” to the prompt.
-# operate_machine("off")
-
-# TODO 3 Print report.
-# operate_machine("report")
-
-# TODO 4 Check resources sufficient?
+def calculate_coins(c_quarters, c_dimes, c_nickels, c_pennies):
+    c_amount = 0
+    c_amount += COIN_AMOUNT["quarters"] * c_quarters
+    c_amount += COIN_AMOUNT["dimes"] * c_dimes
+    c_amount += COIN_AMOUNT["nickels"] * c_nickels
+    c_amount += COIN_AMOUNT["pennies"] * c_pennies
+    return c_amount
 
 
-quarters = int(input("how many quarters?: "))
-dimes = int(input("how many dimes?: "))
-nickles = int(input("how many nickles?: "))
-pennies = int(input("how many pennies?: "))
+def run():
+    resources = {
+        "water": 300,
+        "milk": 200,
+        "coffee": 100,
+    }
 
-is_sufficient = check_resources(resources, order)
+    money_in_machine = 0
+    is_machine_running = True
 
-order_cost = MENU[order]["cost"]
-is_enough_money = calculate_coins(order_cost, quarters, dimes, nickles, pennies)
-if is_sufficient and is_enough_money:
-    operate_machine["make"]()
-    print(f"Here is your {order}. Enjoy!☕")
-else:
-    print("Sorry that's not enough money. Money refunded.")
+    # TODO 6 Loop until shutdown
+    while is_machine_running:
+
+        # TODO 1 Prompt user by asking “What would you like?
+        order = input("What would you like? (espresso/latte/cappuccino): ")
+
+        if order == "off":
+            # TODO 2 Turn off the Coffee Machine by entering “off” to the prompt.
+            is_machine_running = False
+        elif order == "report":
+            # TODO 3 Print report.
+            report_machine_resources(resources, money_in_machine)
+        elif order not in MENU:
+            print("Sorry that's not a valid option.")
+        else:
+            # TODO 4 Check resources sufficient?
+            is_sufficient = check_resources(MENU[order]["ingredients"], resources)
+
+            if is_sufficient:
+                try:
+                    print("Please insert coins.")
+                    quarters = int(input("how many quarters?: "))
+                    dimes = int(input("how many dimes?: "))
+                    nickels = int(input("how many nickels?: "))
+                    pennies = int(input("how many pennies?: "))
+                except ValueError:
+                    print("please insert coins.")
+                    continue
+
+                # TODO 5 Calculate coins
+                order_cost = MENU[order]["cost"]
+                money_of_user = calculate_coins(quarters, dimes, nickels, pennies)
+                is_enough_money = money_of_user >= order_cost
+
+                if is_enough_money:
+
+                    resources = make_drink(MENU[order]["ingredients"], resources)
+                    money_in_machine += order_cost
+                    print(f"Here is ${round(money_of_user - order_cost, 2)} in change.")
+                    print(f"Here is your {order}. Enjoy!☕")
+                else:
+                    print("Sorry that's not enough money. Money refunded.")
 
 
-
-
+run()
