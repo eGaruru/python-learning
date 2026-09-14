@@ -5,6 +5,14 @@ MOVE_DISTANCE = 20
 DIRECTIONS = {"left": 180, "right": 0, "up": 90, "down": 270}
 
 
+def create_segment(position):
+    segment = Turtle("square")
+    segment.color("white")
+    segment.penup()
+    segment.goto(position)
+    return segment
+
+
 class Snake:
     def __init__(self):
         self.segments = []
@@ -14,11 +22,18 @@ class Snake:
     def create_snake(self):
         """Create the initial snake body with three segments."""
         for position in STARTING_POSITION:
-            segment = Turtle("square")
-            segment.color("white")
-            segment.penup()
-            segment.goto(position)
-            self.segments.append(segment)
+            self.add_segment(position)
+
+    def add_segment(self, position):
+        """Add a segment to the snake body."""
+        segment = Turtle("square")
+        segment.color("white")
+        segment.penup()
+        segment.goto(position)
+        self.segments.append(segment)
+
+    def extend_segment(self):
+        self.add_segment(self.segments[-1].pos())
 
     def move(self):
         """Move the snake forward, with each segment following the one ahead of it."""
