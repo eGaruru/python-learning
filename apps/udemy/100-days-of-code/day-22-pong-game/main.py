@@ -30,6 +30,25 @@ while is_game_on:
     screen.update()
     time.sleep(0.1)
 
+    ball.move()
+
+    if ball.ycor() > 270 or ball.ycor() < -270:
+        ball.bounce_y()
+
+    if ball.distance(player_right) < 50 and ball.xcor() > 330:
+        ball.bounce_x(player_right)
+
+    elif ball.distance(player_left) < 50 and ball.xcor() > -330:
+        ball.bounce_x(player_left)
+
+    elif ball.distance(player_right) > 50 and ball.xcor() < -380:
+        score_board.increase_score_left()
+        ball.reset_position()
+    elif ball.distance(player_left) > 50 and ball.xcor() > 380:
+        score_board.increase_score_right()
+        ball.reset_position()
+
+
 # Structure
 # Paddle
 # ball

@@ -14,6 +14,12 @@ class ScoreBoard(Turtle):
         self.goto(0, 240)
         self.write(f"{self.left} : {self.right}", align="center", font=("Arial", 40, "normal"))
 
-    def increment_score(self):
+    def increase_score_left(self):
+        self.left += 1
         self.clear()
-        self.write(f"{self.left} : {self.right}", align="center", font=("Arial", 40, "normal"))
+        self.display()
+
+    def increase_score_right(self):
+        self.right += 1
+        self.clear()
+        self.display()
