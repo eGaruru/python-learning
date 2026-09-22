@@ -16,7 +16,7 @@ player_right = Paddle(350)
 ball = Ball()
 
 score_board = ScoreBoard()
-score_board.display()
+score_board.display_score()
 
 screen.listen()
 
@@ -42,11 +42,15 @@ while is_game_on:
         ball.bounce_x(player_left)
 
     elif ball.distance(player_right) > 50 and ball.xcor() < -380:
-        score_board.increase_score_left()
-        ball.reset_position()
-    elif ball.distance(player_left) > 50 and ball.xcor() > 380:
         score_board.increase_score_right()
         ball.reset_position()
+    elif ball.distance(player_left) > 50 and ball.xcor() > 380:
+        score_board.increase_score_left()
+        ball.reset_position()
+
+    if score_board.left >= 11 or score_board.right >= 11:
+        is_game_on = False
+        score_board.display_winner()
 
 
 # Structure
