@@ -52,11 +52,4 @@ while is_game_on:
         is_game_on = False
         score_board.display_winner()
 
-
-# Structure
-# Paddle
-# ball
-# Scoreboard
-# Paddle == Snake
-
 screen.exitonclick()
